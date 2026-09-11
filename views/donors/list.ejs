@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Unity Union - Blood Donors</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/home">
+        <i class="fas fa-hands-helping me-2"></i>Human Unity Union
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donor/register">Donor Registration</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/donors">Donor List</a></li>
+          <li class="nav-item"><a class="nav-link" href="/drives">Drives</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <% if (user) { %>
+            <% if (user.role === 'admin' || user.role === 'staff') { %>
+              <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+            <% } %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                <i class="fas fa-user me-1"></i><%= user.name %>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <form action="/api/auth/logout" method="POST" style="display: inline;">
+                    <button class="dropdown-item" type="submit">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          <% } else { %>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/signup">Sign Up</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <h2 class="fw-bold text-danger"><i class="fas fa-tint me-2"></i>Blood Donors</h2>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a href="/donor/register" class="btn btn-danger"><i class="fas fa-plus me-1"></i>New Donor</a>
+      </div>
+    </div>
+
+    <div class="card shadow">
+      <div class="card-body">
+        <div class="row g-3 mb-4">
+          <div class="col-md-8">
+            <input type="text" class="form-control" id="searchInput" placeholder="Search by name or email...">
+          </div>
+          <div class="col-md-4">
+            <select class="form-select" id="bloodFilter">
+              <option value="">All Blood Groups</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Blood Group</th>
+                <th>Gender</th>
+                <th>City</th>
+                <th>Eligible</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="donorTableBody">
+              <% if (donors && donors.length > 0) { %>
+                <% donors.forEach(donor => { %>
+                  <tr>
+                    <td><%= donor.firstName %> <%= donor.lastName %></td>
+                    <td><%= donor.email %></td>
+                    <td><%= donor.phone %></td>
+                    <td><span class="badge bg-danger"><%= donor.bloodGroup %></span></td>
+                    <td><%= donor.gender %></td>
+                    <td><%= donor.address && donor.address.city ? donor.address.city : 'N/A' %></td>
+                    <td>
+                      <span class="badge <%= donor.medicalHistory && donor.medicalHistory.isEligible ? 'bg-success' : 'bg-warning' %>">
+                        <%= donor.medicalHistory && donor.medicalHistory.isEligible ? 'Yes' : 'No' %>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="/donors/<%= donor._id %>/edit" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                      <button class="btn btn-sm btn-danger" onclick="deleteDonor('<%= donor._id %>')"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="8" class="text-center text-muted">No donors found.</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Human Unity Union</h5>
+          <p class="mb-0">Serving Humanity with Unity and Compassion</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">&copy; 2026 Human Unity Union. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function deleteDonor(id) {
+      if (confirm('Are you sure you want to delete this donor?')) {
+        await fetch(`/api/donors/${id}`, { method: 'DELETE' });
+        location.reload();
+      }
+    }
+
+    document.getElementById('searchInput')?.addEventListener('input', filterDonors);
+    document.getElementById('bloodFilter')?.addEventListener('change', filterDonors);
+
+    function filterDonors() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const blood = document.getElementById('bloodFilter').value;
+      const rows = document.querySelectorAll('#donorTableBody tr');
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const bloodCell = row.querySelector('.badge');
+        const bloodText = bloodCell ? bloodCell.textContent.trim() : '';
+        const matchSearch = text.includes(search);
+        const matchBlood = !blood || bloodText === blood;
+        row.style.display = matchSearch && matchBlood ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>

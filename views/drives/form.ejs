@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Unity Union - Create Drive</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/home">
+        <i class="fas fa-hands-helping me-2"></i>Human Unity Union
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donor/register">Donor Registration</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donors">Donor List</a></li>
+          <li class="nav-item"><a class="nav-link" href="/drives">Drives</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-user me-1"></i>Admin
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <form action="/api/auth/logout" method="POST" style="display: inline;">
+                  <button class="dropdown-item" type="submit">Logout</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <i class="fas fa-calendar-plus text-danger fa-3x mb-3"></i>
+              <h2 class="fw-bold">Create New Drive</h2>
+              <p class="text-muted">Organize a new welfare drive</p>
+            </div>
+            
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            
+            <form action="/api/drives" method="POST">
+              <h5 class="mb-3 text-danger">Basic Information</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                  <label class="form-label">Drive Name *</label>
+                  <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Drive Type *</label>
+                  <select class="form-select" name="type" required>
+                    <option value="Blood Donation">Blood Donation</option>
+                    <option value="Plantation">Plantation</option>
+                    <option value="Rashan">Rashan</option>
+                    <option value="Rozgar">Rozgar</option>
+                    <option value="Ghaza">Ghaza</option>
+                    <option value="Education">Education</option>
+                    <option value="Health">Health</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Description *</label>
+                  <textarea class="form-control" name="description" rows="3" required></textarea>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Status</label>
+                  <select class="form-select" name="status">
+                    <option value="Planning">Planning</option>
+                    <option value="Active">Active</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Max Participants</label>
+                  <input type="number" class="form-control" name="maxParticipants" value="100">
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger">Location</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">Venue *</label>
+                  <input type="text" class="form-control" name="location[venue]" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">City *</label>
+                  <input type="text" class="form-control" name="location[city]" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">State</label>
+                  <input type="text" class="form-control" name="location[state]">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Country</label>
+                  <input type="text" class="form-control" name="location[country]" value="India">
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger">Date & Time</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">Start Date *</label>
+                  <input type="date" class="form-control" name="date[startDate]" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">End Date *</label>
+                  <input type="date" class="form-control" name="date[endDate]" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Start Time</label>
+                  <input type="time" class="form-control" name="time[startTime]">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">End Time</label>
+                  <input type="time" class="form-control" name="time[endTime]">
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger">Contact Person</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" name="contactPerson[name]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Phone</label>
+                  <input type="tel" class="form-control" name="contactPerson[phone]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="contactPerson[email]">
+                </div>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-danger btn-lg">Create Drive</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Human Unity Union</h5>
+          <p class="mb-0">Serving Humanity with Unity and Compassion</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">&copy; 2026 Human Unity Union. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

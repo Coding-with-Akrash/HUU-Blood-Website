@@ -1,0 +1,74 @@
+:root {
+  --primary-color: #d32f2f;
+  --secondary-color: #1976d2;
+  --success-color: #388e3c;
+  --warning-color: #f57c00;
+  --danger-color: #d32f2f;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.navbar-brand {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.shadow-sm {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+}
+
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.alert {
+  border-radius: 8px;
+  border: none;
+}
+
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(211, 47, 47, 0.25);
+}

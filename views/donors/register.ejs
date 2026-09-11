@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Unity Union - Blood Donor Registration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/home">
+        <i class="fas fa-hands-helping me-2"></i>Human Unity Union
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/donor/register">Donor Registration</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donors">Donor List</a></li>
+          <li class="nav-item"><a class="nav-link" href="/drives">Drives</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <% if (user) { %>
+            <% if (user.role === 'admin' || user.role === 'staff') { %>
+              <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
+            <% } %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                <i class="fas fa-user me-1"></i><%= user.name %>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <form action="/api/auth/logout" method="POST" style="display: inline;">
+                    <button class="dropdown-item" type="submit">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          <% } else { %>
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/signup">Sign Up</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <i class="fas fa-tint text-danger fa-3x mb-3"></i>
+              <h2 class="fw-bold">Blood Donor Registration</h2>
+              <p class="text-muted">Human Unity Union</p>
+            </div>
+            
+            <% if (success) { %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+            <% if (error) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+            
+            <form action="/api/donors" method="POST">
+              <h5 class="mb-3 text-danger"><i class="fas fa-user me-2"></i>Personal Information</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label">First Name *</label>
+                  <input type="text" class="form-control" name="firstName" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last Name *</label>
+                  <input type="text" class="form-control" name="lastName" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Email *</label>
+                  <input type="email" class="form-control" name="email" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone *</label>
+                  <input type="tel" class="form-control" name="phone" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Blood Group *</label>
+                  <select class="form-select" name="bloodGroup" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Date of Birth *</label>
+                  <input type="date" class="form-control" name="dateOfBirth" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Gender *</label>
+                  <select class="form-select" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Weight (kg) *</label>
+                  <input type="number" class="form-control" name="weight" required>
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger"><i class="fas fa-map-marker-alt me-2"></i>Address</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <label class="form-label">Street</label>
+                  <input type="text" class="form-control" name="address[street]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">City</label>
+                  <input type="text" class="form-control" name="address[city]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">State</label>
+                  <input type="text" class="form-control" name="address[state]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Pincode</label>
+                  <input type="text" class="form-control" name="address[pincode]">
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger"><i class="fas fa-medkit me-2"></i>Medical Information</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="medicalHistory[hasDiseases]" id="hasDiseases">
+                    <label class="form-check-label" for="hasDiseases">Do you have any diseases?</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last Donation Date</label>
+                  <input type="date" class="form-control" name="medicalHistory[lastDonation]">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Eligible for Donation</label>
+                  <select class="form-select" name="medicalHistory[isEligible]">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </div>
+              </div>
+
+              <h5 class="mb-3 text-danger"><i class="fas fa-phone-alt me-2"></i>Emergency Contact</h5>
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <label class="form-label">Contact Name</label>
+                  <input type="text" class="form-control" name="emergencyContact[name]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Contact Phone</label>
+                  <input type="tel" class="form-control" name="emergencyContact[phone]">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Relation</label>
+                  <input type="text" class="form-control" name="emergencyContact[relation]">
+                </div>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-danger btn-lg">Register as Blood Donor</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Human Unity Union</h5>
+          <p class="mb-0">Serving Humanity with Unity and Compassion</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">&copy; 2026 Human Unity Union. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

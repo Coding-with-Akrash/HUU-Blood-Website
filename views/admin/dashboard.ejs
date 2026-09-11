@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Unity Union - Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/home">
+        <i class="fas fa-hands-helping me-2"></i>Human Unity Union
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donor/register">Donor Registration</a></li>
+          <li class="nav-item"><a class="nav-link" href="/donors">Donor List</a></li>
+          <li class="nav-item"><a class="nav-link" href="/drives">Drives</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/admin/dashboard">Dashboard</a></li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+              <i class="fas fa-user me-1"></i>Admin
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <form action="/api/auth/logout" method="POST" style="display: inline;">
+                  <button class="dropdown-item" type="submit">Logout</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid py-4">
+    <h2 class="fw-bold mb-4">Admin Dashboard</h2>
+    
+    <% if (stats) { %>
+      <div class="row g-4 mb-5">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-users text-primary fa-2x mb-2"></i>
+              <h3 class="fw-bold text-primary"><%= stats.totalUsers || 0 %></h3>
+              <p class="text-muted mb-0">Total Users</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-tint text-danger fa-2x mb-2"></i>
+              <h3 class="fw-bold text-danger"><%= stats.totalDonors || 0 %></h3>
+              <p class="text-muted mb-0">Blood Donors</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-calendar text-success fa-2x mb-2"></i>
+              <h3 class="fw-bold text-success"><%= stats.totalDrives || 0 %></h3>
+              <p class="text-muted mb-0">Total Drives</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-spinner text-warning fa-2x mb-2"></i>
+              <h3 class="fw-bold text-warning"><%= stats.activeDrives || 0 %></h3>
+              <p class="text-muted mb-0">Active Drives</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 fw-bold">Donors by Blood Group</div>
+            <div class="card-body">
+              <% if (stats.donorsByBloodGroup && stats.donorsByBloodGroup.length > 0) { %>
+                <% stats.donorsByBloodGroup.forEach(item => { %>
+                  <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span><span class="badge bg-danger me-2"><%= item._id %></span> Blood Group</span>
+                    <span class="badge bg-primary"><%= item.count %></span>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <p class="text-muted mb-0">No data available</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 fw-bold">Drives by Type</div>
+            <div class="card-body">
+              <% if (stats.drivesByType && stats.drivesByType.length > 0) { %>
+                <% stats.drivesByType.forEach(item => { %>
+                  <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <span><%= item._id %></span>
+                    <span class="badge bg-success"><%= item.count %></span>
+                  </div>
+                <% }) %>
+              <% } else { %>
+                <p class="text-muted mb-0">No data available</p>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="alert alert-info">Loading dashboard data...</div>
+    <% } %>
+  </div>
+
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Human Unity Union</h5>
+          <p class="mb-0">Serving Humanity with Unity and Compassion</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0">&copy; 2026 Human Unity Union. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
